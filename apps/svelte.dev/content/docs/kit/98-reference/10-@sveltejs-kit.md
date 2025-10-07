@@ -2315,8 +2315,8 @@ type RemoteForm<
 		[attachment: symbol]: (node: HTMLFormElement) => void;
 	};
 	/**
-	 * Create an instance of the form for the given key.
-	 * The key is stringified and used for deduplication to potentially reuse existing instances.
+	 * Create an instance of the form for the given `id`.
+	 * The `id` is stringified and used for deduplication to potentially reuse existing instances.
 	 * Useful when you have multiple forms that use the same remote form action, for example in a loop.
 	 * ```svelte
 	 * {#each todos as todo}
@@ -2329,7 +2329,7 @@ type RemoteForm<
 	 * ```
 	 */
 	for(
-		key: string | number | boolean
+		id: ExtractId<Input>
 	): Omit<RemoteForm<Input, Output>, 'for'>;
 	/** Preflight checks */
 	preflight(
