@@ -460,7 +460,7 @@ If the submitted data doesn't pass the schema, the callback will not run. Instea
 	<label>
 		<h2>Title</h2>
 
-+++		{#each createPost.fields.title.issues() as issue}
++++		{#each createPost.fields.title.issues() ?? [] as issue}
 			<p class="issue">{issue.message}</p>
 		{/each}+++
 
@@ -470,7 +470,7 @@ If the submitted data doesn't pass the schema, the callback will not run. Instea
 	<label>
 		<h2>Write your post</h2>
 
-+++		{#each createPost.fields.content.issues() as issue}
++++		{#each createPost.fields.content.issues() ?? [] as issue}
 			<p class="issue">{issue.message}</p>
 		{/each}+++
 
@@ -516,7 +516,7 @@ For client-side validation, you can specify a _preflight_ schema which will popu
 To get a list of _all_ issues, rather than just those belonging to a single field, you can use the `fields.allIssues()` method:
 
 ```svelte
-{#each createPost.fields.allIssues() as issue}
+{#each createPost.fields.allissues() ?? [] as issue}
 	<p>{issue.message}</p>
 {/each}
 ```
@@ -755,6 +755,27 @@ await submit().updates(
 ```
 
 The override will be applied immediately, and released when the submission completes (or fails).
+
+### Multiple instances of a form
+
+Some forms may be repeated as part of a list. In this case you can create separate instances of a form function via `for(id)` to achieve isolation.
+
+```svelte
+<!--- file: src/routes/todos/+page.svelte --->
+<script>
+	import { getTodos, modifyTodo } from '../data.remote';
+</script>
+
+<h1>Todos</h1>
+
+{#each await getTodos() as todo}
+	{@const modify = modifyTodo.for(todo.id)}
+	<form {...modify}>
+		<!-- -->
+		<button disabled={!!modify.pending}>save changes</button>
+	</form>
+{/each}
+```
 
 ### buttonProps
 
